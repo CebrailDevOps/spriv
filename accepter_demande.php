@@ -16,9 +16,16 @@ if (isset($_POST['ref_demande'])) {
         $stmt = $conn->prepare("UPDATE FROM demandes_recues SET statut = 'En attente de reconnexion' WHERE ref_demande = :ref_demande");
         $stmt->bindParam(':ref_demande', $ref_demande);
         $stmt->execute();
+        
+        $stmt = $conn->prepare("SELECT ip_demandeur FROM demandes_recues WHERE token = ?");
+        $stmt->bindParam(':ref_demande', $ref_demande)
+        $stmt->execute([$ip_demandeur]);
 
+        $stmt = $conn->prepare("SELECT * FROM login WHERE token = ?");
+        $stmt->execute([$token]);
+        
         $ip_add=shell_exec("hostname -I");
-        header('Location: http://10.0.10.231/reponse.php?ref_demande='.$ref_demande.'&ip_add='. $ip_add);
+        header('Location: http://'.$ip_demandeur.'/accepte.php?ref_demande='.$ref_demande.'&ip_add='. $ip_add.'&token='. $token);
     } catch(PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
