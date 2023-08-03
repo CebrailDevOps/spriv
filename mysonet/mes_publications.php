@@ -73,14 +73,6 @@ $demandes_ami = $stmt->fetchColumn();
     // Si le nombre de demandes d'ami est supérieur à 0, afficher le message
     if ($demandes_ami > 0) {
         echo "<p><strong>" . $poste["date_publication"]. "</strong>: " . $poste["contenu"];
-        echo "<form action='modifier_poste.php' method='post' style='display:inline;'>
-            <input type='hidden' name='poste_id' value='" . $poste["id"] . "' />
-            <input type='submit' value='Modifier' />
-        </form>";
-        echo "<form action='supprimer_poste.php' method='post' style='display:inline;'>
-                <input type='hidden' name='poste_id' value='" . $poste["id"] . "' />
-                <input type='submit' value='Supprimer' />
-              </form></p>";
     }
     ?>
 
@@ -90,6 +82,14 @@ $demandes_ami = $stmt->fetchColumn();
     <?php
     foreach($mes_postes as $poste){
         echo "<p><strong>" . $poste["date_publication"]. "</strong>: " . $poste["contenu"]. "</p>";
+        echo "<form action='modifier_poste.php' method='post' style='display:inline;'>
+            <input type='hidden' name='poste_id' value='" . $poste["id"] . "' />
+            <input type='submit' value='Modifier' />
+        </form>";
+        echo "<form action='supprimer_poste.php' method='post' style='display:inline;'>
+                <input type='hidden' name='poste_id' value='" . $poste["id"] . "' />
+                <input type='submit' value='Supprimer' />
+            </form></p>";
     }
     ?>
 </body>
