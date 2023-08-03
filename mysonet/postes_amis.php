@@ -67,47 +67,49 @@ if (file_exists($file_path)) {
 $stmt = $conn->query("SELECT COUNT(*) FROM demandes_recues WHERE statut = 'répondre'");
 $demandes_ami = $stmt->fetchColumn();
 ?>
-
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Publications des amis</title>
+    <title>Publications des amis - MySoNet.Online</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="header"><?php echo $_SESSION['pseudo'] ?> - MySoNet.Online</div>
 
-    <?php
-    // Si le nombre de demandes d'ami est supérieur à 0, afficher le message
-    if ($demandes_ami > 0) {
-        echo "<p><a href='notif.php'>Vous avez reçu " . $demandes_ami . ($demandes_ami > 1 ? " demandes d'ami." : " demande d'ami.") . "</a></p>";
-    }
-    ?>
+    <div class="navbar">
+        <a href="mes_publications.php">Mes publications</a>
+        <?php if ($demandes_ami > 0) {
+            echo '<a href="notif.php" class="notif-link"><span class="notif-icon">🔔</span><span class="notif-count">'.$demandes_ami.'</span></a>';
+        } ?>
+    </div>
 
-    <p><a href="mes_publications.php">Mes publications</a></p>
+    <div class="container">
+        <h1>Publications des amis</h1>
+        <div id='postes_amis'></div>
+        <script>
+        // Les amis et les adresses IP récupérées à partir de PHP
+        let amis = <?php echo json_encode($amis); ?>;
+        let userToken = <?php echo json_encode($user_token); ?>;
 
-    <h1>Publications des amis</h1>
-    <div id='postes_amis'></div>
-    <script>
-    // Les amis et les adresses IP récupérées à partir de PHP
-    let amis = <?php echo json_encode($amis); ?>;
-    let userToken = <?php echo json_encode($user_token); ?>;
-
-    amis.forEach(ami => {
-        fetch(`http://${ami.ip_add}/mes_postes.php?token=${userToken}`)
-            .then(response => response.json())
-            .then(postes => {
-                let posteDiv = document.getElementById('postes_amis');
-                postes.forEach(poste => {
-                    let p = document.createElement('p');
-                    posteDiv.appendChild(p);
-                    let strong = document.createElement('strong');
-                    strong.textContent = ami.pseudo + ' ' + poste.date_publication + ': ';
-                    p.appendChild(strong);
-                    let span = document.createElement('span');
-                    span.textContent =  poste.contenu;
-                    p.appendChild(span);
-                });
-            })
-            .catch(error => console.error('Erreur:', error));
-    });
-    </script>
+        amis.forEach(ami => {
+            fetch(`http://${ami.ip_add}/mes_postes.php?token=${userToken}`)
+                .then(response => response.json())
+                .then(postes => {
+                    let posteDiv = document.getElementById('postes_amis');
+                    postes.forEach(poste => {
+                        let p = document.createElement('p');
+                        posteDiv.appendChild(p);
+                        let strong = document.createElement('strong');
+                        strong.textContent = ami.pseudo + ' ' + poste.date_publication + ': ';
+                        p.appendChild(strong);
+                        let span = document.createElement('span');
+                        span.textContent =  poste.contenu;
+                        p.appendChild(span);
+                    });
+                })
+                .catch(error => console.error('Erreur:', error));
+        });
+        </script>
+    </div>
 </body>
 </html>
