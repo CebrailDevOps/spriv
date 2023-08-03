@@ -79,6 +79,15 @@ $demandes_ami = $stmt->fetchColumn();
     <p><a href="postes_amis.php">Publications des amis</a></p>
 
     <h1>Mes publications</h1>
+    
+    <h1>Mes publications</h1>
+    <!-- Formulaire pour créer un nouveau poste -->
+    <form action="creer_poste.php" method="post">
+        <textarea name="contenu" placeholder="Quoi de neuf ?" rows="4" cols="50"></textarea>
+        <br>
+        <input type="submit" value="Publier">
+    </form>
+    
     <?php
     foreach($mes_postes as $poste){
         echo "<p><strong>" . $poste["date_publication"]. "</strong>: " . $poste["contenu"]. "</p>";
