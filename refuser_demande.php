@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['pseudo'])) {
+    header("Location: index.php");
+    exit();
+}
 if (isset($_POST['ref_demande'])) {
     $ref_demande = $_POST['ref_demande'];
 

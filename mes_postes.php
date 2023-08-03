@@ -18,7 +18,7 @@
         }
         
         $token = $_GET['token'];
-        $stmt = $conn->prepare("SELECT * FROM login WHERE token = ?");
+        $stmt = $conn->prepare("SELECT * FROM mes_amis WHERE token = ?");
         $stmt->execute([$token]);
 
         // Si le token n'est pas dans la table des amis, renvoyer une erreur
