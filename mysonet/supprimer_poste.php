@@ -20,7 +20,7 @@ if (isset($_POST['poste_id'])) {
 
         // Vérifiez que l'utilisateur supprime bien son propre poste
         $pseudo = $_SESSION['pseudo'];
-        $stmt = $conn->prepare("DELETE FROM mes_postes WHERE id = :poste_id");
+        $stmt = $conn->prepare("DELETE FROM mes_postes WHERE ID = :poste_id");
         $stmt->bindParam(':poste_id', $poste_id);
         $stmt->execute();
 

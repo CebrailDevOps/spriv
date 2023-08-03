@@ -83,11 +83,11 @@ $demandes_ami = $stmt->fetchColumn();
     foreach($mes_postes as $poste){
         echo "<p><strong>" . $poste["date_publication"]. "</strong>: " . $poste["contenu"]. "</p>";
         echo "<form action='modifier_poste.php' method='post' style='display:inline;'>
-            <input type='hidden' name='poste_id' value='" . $poste["id"] . "' />
+            <input type='hidden' name='poste_id' value='" . $poste["ID"] . "' />
             <input type='submit' value='Modifier' />
         </form>";
         echo "<form action='supprimer_poste.php' method='post' style='display:inline;'>
-                <input type='hidden' name='poste_id' value='" . $poste["id"] . "' />
+                <input type='hidden' name='poste_id' value='" . $poste["ID"] . "' />
                 <input type='submit' value='Supprimer' />
             </form></p>";
     }

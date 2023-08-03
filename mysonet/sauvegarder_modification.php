@@ -17,7 +17,7 @@ $dbname = "mysonet";
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $stmt = $conn->prepare("UPDATE mes_postes SET contenu = :contenu WHERE id = :poste_id");
+    $stmt = $conn->prepare("UPDATE mes_postes SET contenu = :contenu WHERE ID = :poste_id");
     $stmt->bindParam(':contenu', $contenu);
     $stmt->bindParam(':poste_id', $poste_id);
     $stmt->execute();

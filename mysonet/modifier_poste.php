@@ -16,7 +16,7 @@ $dbname = "mysonet";
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $stmt = $conn->prepare("SELECT contenu FROM mes_postes WHERE id = :poste_id");
+    $stmt = $conn->prepare("SELECT contenu FROM mes_postes WHERE ID = :poste_id");
     $stmt->bindParam(':poste_id', $poste_id);
     $stmt->execute();
 
