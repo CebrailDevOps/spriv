@@ -9,7 +9,7 @@ if (isset($_GET['ref_demande'])) {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $stmt = $conn->prepare("DELETE FROM demandes_recues WHERE ref_demande = :ref_demande");
-        $stmt->bindParam(':ref_demande', $ref_demande)
+        $stmt->bindParam(':ref_demande', $ref_demande);
         $stmt->execute();
     } catch(PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
