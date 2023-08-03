@@ -19,12 +19,12 @@ if (isset($_POST['ref_demande'])) {
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Modifier la demande d'ami
-        $stmt = $conn->prepare("UPDATE FROM demandes_recues SET statut = 'En attente de reconnexion' WHERE ref_demande = :ref_demande");
+        $stmt = $conn->prepare("UPDATE demandes_recues SET statut = 'En attente de reconnexion' WHERE ref_demande = :ref_demande");
         $stmt->bindParam(':ref_demande', $ref_demande);
         $stmt->execute();
         
-        $stmt = $conn->prepare("SELECT ip_demandeur FROM demandes_recues WHERE ref_demande = ?");
-        $stmt->bindParam(':ref_demande', $ref_demande)
+        $stmt = $conn->prepare("SELECT ip_demandeur FROM demandes_recues WHERE ref_demande = :ref_demande");
+        $stmt->bindParam(':ref_demande', $ref_demande);
         $stmt->execute();
         $ip_demandeur = $stmt->fetchColumn();
 
@@ -36,13 +36,16 @@ if (isset($_POST['ref_demande'])) {
             echo "<script>setTimeout(function(){window.location.href = 'notif.php';}, 3000);</script>";
         }
         else {
-            $stmt = $conn->prepare("SELECT token FROM login WHERE pseudo = ?");
-            $stmt->bindParam(':ref_demande', $pseudo)
+            $stmt = $conn->prepare("SELECT token FROM login WHERE pseudo = :pseudo");
+            $stmt->bindParam(':pseudo', $pseudo);
             $stmt->execute();
             $token = $stmt->fetchColumn();
             
-            $ip_add=shell_exec("hostname -I");
+            $ip_add_full = shell_exec("hostname -I");
+            $ip_add_array = explode(' ', $ip_add_full);
+            $ip_add = $ip_add_array[0]; // Prend la première adresse IP
             header('Location: http://'.$ip_demandeur.'/accepte.php?ref_demande='.$ref_demande.'&ip_add='. $ip_add.'&token='. $token);
+            exit();
         }
         
     } catch(PDOException $e) {

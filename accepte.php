@@ -22,15 +22,26 @@ if (isset($_GET['ref_demande']) AND isset($_GET['ip_add']) AND isset($_GET['toke
                 // Si la ligne ne correspond pas à ref_demande, ajoutez-la au nouveau tableau
                 $new_lines[] = $line;
             } else {
-                // Préparer la requête SQL pour insérer le nouvel ami dans la base de données
-                $stmt = $conn->prepare("INSERT INTO mes_amis (pseudo, ip_add, token) VALUES (:pseudo, :ip_add, :token)");
+                $servername = "localhost";
+                $username = "root";
+                $password = "123456a.";
+                $dbname = "mysonet";
+                try {
+                    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    // Préparer la requête SQL pour insérer le nouvel ami dans la base de données
+                    $stmt = $conn->prepare("INSERT INTO mes_amis (pseudo, ip_add, token) VALUES (:pseudo, :ip_add, :token)");
 
-                // Exécuter la requête SQL
-                $stmt->execute([
-                ':pseudo' => $pseudo_demande,
-                ':ip_add' => $ip_add,
-                ':token' => $token
-                ]);
+                    // Exécuter la requête SQL
+                    $stmt->execute([
+                    ':pseudo' => $pseudo_demande,
+                    ':ip_add' => $ip_add,
+                    ':token' => $token
+                    ]);
+                } catch(PDOException $e) {
+                    echo "Connection failed: " . $e->getMessage();
+                    exit(); // Arrêter l'exécution si la connexion échoue
+                }
             }
         }
         // Écrire le nouveau tableau dans le fichier
