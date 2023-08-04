@@ -128,7 +128,7 @@ try {
                     p.className = 'poste';
                     posteDiv.appendChild(p);
                     let strong = document.createElement('strong');
-                    strong.textContent = ami.pseudo + ' ' + timeSince(poste.date_publication*1000) + ': ';
+                    strong.textContent = ami.pseudo + ' ' + timeSince(poste.date_publication) + ': ';
                     p.appendChild(strong);
                     let span = document.createElement('span');
                     span.textContent =  poste.contenu;
