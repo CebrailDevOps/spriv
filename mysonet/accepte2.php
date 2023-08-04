@@ -23,7 +23,7 @@ if (isset($_GET['ref_demande'])) {
             $stmt = $conn->prepare("INSERT INTO mes_amis (pseudo,ip_add,token) VALUES (:demandeur,:ip_demandeur,:token)");
             $stmt->bindParam(':demandeur', $demandeur);
             $stmt->bindParam(':ip_demandeur', $ip_demandeur);
-            $stmt->bindParam(':token', $token);
+            $stmt->bindParam(':token', $_GET['token']);
             $stmt->execute();
         }
         $stmt = $conn->prepare("DELETE FROM demandes_recues WHERE ref_demande = :ref_demande");

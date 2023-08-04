@@ -23,7 +23,6 @@ try {
     $token_stmt = $conn->prepare("SELECT token FROM login WHERE pseudo = :pseudo");
     $token_stmt->bindParam(':pseudo', $pseudo);
     $token_stmt->execute();
-
     $user_token = $token_stmt->fetchColumn(); // Récupère le token de l'utilisateur
 
     // Récupérer les amis et les adresses IP
@@ -85,7 +84,7 @@ $demandes_ami = $stmt->fetchColumn();
 
     <div class="container">
         <h1>Publications des amis</h1>
-        <div id='postes_amis'></div>
+        <div id="postes_amis"></div>
         <script>
         // Les amis et les adresses IP récupérées à partir de PHP
         let amis = <?php echo json_encode($amis); ?>;
