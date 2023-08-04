@@ -6,10 +6,7 @@ if (!isset($_SESSION['pseudo']) || empty($_POST['contenu'])) {
     exit();
 }
 
-$servername = "localhost";
-$username = "root";
-$password = "123456a.";
-$dbname = "mysonet";
+include 'db.php';
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);

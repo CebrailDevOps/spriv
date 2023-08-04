@@ -6,10 +6,7 @@ if (!isset($_SESSION['pseudo'])) {
     exit();
 }
 
-$servername = "localhost";
-$username = "root";
-$password = "123456a.";
-$dbname = "mysonet";
+include 'db.php';
 
 try {
     // Créer une connexion

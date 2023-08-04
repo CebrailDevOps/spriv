@@ -9,10 +9,7 @@ if (!isset($_SESSION['pseudo']) || !isset($_POST['poste_id']) || !isset($_POST['
 $poste_id = $_POST['poste_id'];
 $contenu = $_POST['contenu'];
 
-$servername = "localhost";
-$username = "root";
-$password = "123456a.";
-$dbname = "mysonet";
+include 'db.php';
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);

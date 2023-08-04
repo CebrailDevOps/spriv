@@ -22,10 +22,7 @@ if (isset($_GET['ref_demande']) AND isset($_GET['ip_add']) AND isset($_GET['toke
                 // Si la ligne ne correspond pas à ref_demande, ajoutez-la au nouveau tableau
                 $new_lines[] = $line;
             } else {
-                $servername = "localhost";
-                $username = "root";
-                $password = "123456a.";
-                $dbname = "mysonet";
+                include 'db.php';
                 try {
                     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
                     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -49,7 +46,7 @@ if (isset($_GET['ref_demande']) AND isset($_GET['ip_add']) AND isset($_GET['toke
         }
         // Écrire le nouveau tableau dans le fichier
         file_put_contents($file_path, implode(PHP_EOL, $new_lines));
-        header('Location: http://10.0.10.231/reponse.php?ref_demande='.$ref_demande.'&ip_add='. $ip_add.'&token='.$mon_token);
+        header('Location: http://_IP_DU_SPRIN_/reponse.php?ref_demande='.$ref_demande.'&ip_add='. $ip_add.'&token='.$mon_token);
     }
 }
 ?>

@@ -8,10 +8,7 @@ if (isset($_POST['ref_demande'])) {
     $ref_demande = $_POST['ref_demande'];
 
     // connexion à la base de données
-    $servername = "localhost";
-    $username = "root";
-    $password = "123456a.";
-    $dbname = "mysonet";
+    include 'db.php';
 
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);

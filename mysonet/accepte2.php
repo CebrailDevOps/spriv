@@ -1,10 +1,6 @@
 <?php
 if (isset($_GET['ref_demande'])) {
-    $ref_demande = $_GET['ref_demande'];
-    $servername = "localhost";
-    $username = "root";
-    $password = "123456a.";
-    $dbname = "mysonet";
+    include 'db.php';
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

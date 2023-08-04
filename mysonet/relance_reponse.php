@@ -3,7 +3,8 @@
     session_start();
 
     // Connexion à la base de données
-    $pdo = new PDO('mysql:host=localhost;dbname=mysonet', 'root', '123456a.');
+    include 'db.php';
+    $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Récupérer toutes les demandes en attente de reconnexion
