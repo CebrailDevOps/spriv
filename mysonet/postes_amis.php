@@ -16,7 +16,9 @@ try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+} catch(PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
     $pseudo = $_SESSION['pseudo'];
 
     // Récupération du token de l'utilisateur actuellement connecté
@@ -29,42 +31,39 @@ try {
     $stmt = $conn->query("SELECT * FROM mes_amis");
     $amis = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-} catch(PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-}
 
-// Assurez-vous de vérifier le chemin d'accès au fichier et de le modifier si nécessaire
-$file_path = '/home/inspectorsonet/demandes_en_attente';
+    // Assurez-vous de vérifier le chemin d'accès au fichier et de le modifier si nécessaire
+    $file_path = '/home/inspectorsonet/demandes_en_attente';
 
-if (file_exists($file_path)) {
-    // Lire le fichier dans un tableau
-    $lines = file($file_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if (file_exists($file_path)) {
+        // Lire le fichier dans un tableau
+        $lines = file($file_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-    // Parcourir chaque ligne du fichier
-    foreach ($lines as $line) {
-        // Diviser la ligne pour obtenir les détails de la demande
-        list($ref_demande, $pseudo_demandeur, $ip_demandeur, $date_et_heure) = explode(';', $line);
+        // Parcourir chaque ligne du fichier
+        foreach ($lines as $line) {
+            // Diviser la ligne pour obtenir les détails de la demande
+            list($ref_demande, $pseudo_demandeur, $ip_demandeur, $date_et_heure) = explode(';', $line);
 
-        // Préparer la requête SQL pour insérer la demande dans la base de données
-        $stmt = $conn->prepare("INSERT INTO demandes_recues (ref_demande, demandeur, ip_demandeur, date_demande)
-                                VALUES (:ref_demande, :demandeur, :ip_demandeur, :date_demande)");
+            // Préparer la requête SQL pour insérer la demande dans la base de données
+            $stmt = $conn->prepare("INSERT INTO demandes_recues (ref_demande, demandeur, ip_demandeur, date_demande)
+                                    VALUES (:ref_demande, :demandeur, :ip_demandeur, :date_demande)");
 
-        // Exécuter la requête SQL
-        $stmt->execute([
-            ':ref_demande' => $ref_demande,
-            ':demandeur' => $pseudo_demandeur,
-            ':ip_demandeur' => $ip_demandeur,
-            ':date_demande' => $date_et_heure
-        ]);
+            // Exécuter la requête SQL
+            $stmt->execute([
+                ':ref_demande' => $ref_demande,
+                ':demandeur' => $pseudo_demandeur,
+                ':ip_demandeur' => $ip_demandeur,
+                ':date_demande' => $date_et_heure
+            ]);
+        }
+
+        // Une fois que toutes les demandes sont traitées, vous pouvez vider le fichier
+        file_put_contents($file_path, '');
     }
 
-    // Une fois que toutes les demandes sont traitées, vous pouvez vider le fichier
-    file_put_contents($file_path, '');
-}
-
-// Récupération du nombre de demandes d'ami non traitées
-$stmt = $conn->query("SELECT COUNT(*) FROM demandes_recues WHERE statut = 'répondre'");
-$demandes_ami = $stmt->fetchColumn();
+    // Récupération du nombre de demandes d'ami non traitées
+    $stmt = $conn->query("SELECT COUNT(*) FROM demandes_recues WHERE statut = 'répondre'");
+    $demandes_ami = $stmt->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html>
@@ -85,57 +84,57 @@ $demandes_ami = $stmt->fetchColumn();
     <div class="container">
         <h1>Publications des amis</h1>
         <div id="postes_amis"></div>
-        <script>
-        // Les amis et les adresses IP récupérées à partir de PHP
-        let amis = <?php echo json_encode($amis); ?>;
-        let userToken = <?php echo json_encode($user_token); ?>;
-
-        function timeSince(datePubli) {
-            let parts = datePubli.split(' ');
-            let dateParts = parts[0].split('-');
-            let timeParts = parts[1].split(':');
-
-            let date = new Date(
-                dateParts[0], // année
-                dateParts[1] - 1, // mois (0-indexé)
-                dateParts[2], // jour
-                timeParts[0], // heure
-                timeParts[1], // minute
-                timeParts[2] // seconde
-            );
-
-            const seconds = Math.floor((new Date() - date) / 1000);
-
-            if (seconds < 60) return "il y a " + seconds + "s";
-            if (seconds < 3600) return "il y a " + Math.floor(seconds / 60) + "min";
-            if (seconds < 86400) return "il y a " + Math.floor(seconds / 3600) + "h";
-            if (seconds < 604800) return "il y a " + Math.floor(seconds / 86400) + "j";
-            if (seconds < 2592000) return "il y a " + Math.floor(seconds / 604800) + "sem";
-            if (seconds < 31536000) return "il y a " + Math.floor(seconds / 2592000) + " mois";
-            if (seconds === 31536000) return "il y a 1 an";
-            return "il y a " + Math.floor(seconds / 31536000) + " ans";
-        }
-
-        amis.forEach(ami => {
-            fetch(`http://${ami.ip_add}/mes_postes.php?token=${userToken}`)
-                .then(response => response.json())
-                .then(postes => {
-                    let posteDiv = document.getElementById('postes_amis');
-                    postes.forEach(poste => {
-                        let p = document.createElement('p');
-                        p.className = 'poste';
-                        posteDiv.appendChild(p);
-                        let strong = document.createElement('strong');
-                        strong.textContent = ami.pseudo + ' ' + timeSince(poste.date_publication*1000) + ': ';
-                        p.appendChild(strong);
-                        let span = document.createElement('span');
-                        span.textContent =  poste.contenu;
-                        p.appendChild(span);
-                    });
-                })
-                .catch(error => console.error('Erreur:', error));
-        });
-        </script>
     </div>
 </body>
 </html>
+<script>
+    // Les amis et les adresses IP récupérées à partir de PHP
+    let amis = <?php echo json_encode($amis); ?>;
+    let userToken = <?php echo json_encode($user_token); ?>;
+
+    function timeSince(datePubli) {
+        let parts = datePubli.split(' ');
+        let dateParts = parts[0].split('-');
+        let timeParts = parts[1].split(':');
+
+        let date = new Date(
+            dateParts[0], // année
+            dateParts[1] - 1, // mois (0-indexé)
+            dateParts[2], // jour
+            timeParts[0], // heure
+            timeParts[1], // minute
+            timeParts[2] // seconde
+        );
+
+        const seconds = Math.floor((new Date() - date) / 1000);
+
+        if (seconds < 60) return "il y a " + seconds + "s";
+        if (seconds < 3600) return "il y a " + Math.floor(seconds / 60) + "min";
+        if (seconds < 86400) return "il y a " + Math.floor(seconds / 3600) + "h";
+        if (seconds < 604800) return "il y a " + Math.floor(seconds / 86400) + "j";
+        if (seconds < 2592000) return "il y a " + Math.floor(seconds / 604800) + "sem";
+        if (seconds < 31536000) return "il y a " + Math.floor(seconds / 2592000) + " mois";
+        if (seconds === 31536000) return "il y a 1 an";
+        return "il y a " + Math.floor(seconds / 31536000) + " ans";
+    }
+
+    amis.forEach(ami => {
+        fetch(`http://${ami.ip_add}/mes_postes.php?token=${userToken}`)
+            .then(response => response.json())
+            .then(postes => {
+                let posteDiv = document.getElementById('postes_amis');
+                postes.forEach(poste => {
+                    let p = document.createElement('p');
+                    p.className = 'poste';
+                    posteDiv.appendChild(p);
+                    let strong = document.createElement('strong');
+                    strong.textContent = ami.pseudo + ' ' + timeSince(poste.date_publication*1000) + ': ';
+                    p.appendChild(strong);
+                    let span = document.createElement('span');
+                    span.textContent =  poste.contenu;
+                    p.appendChild(span);
+                });
+            })
+            .catch(error => console.error('Erreur:', error));
+    });
+</script>

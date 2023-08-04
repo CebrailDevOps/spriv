@@ -19,7 +19,7 @@
         
         $token = $_GET['token'];
         $stmt = $conn->prepare("SELECT * FROM mes_amis WHERE token = :token");
-        $stmt = bindParam(':token', $token);
+        $stmt->bindParam(':token', $token);
         $stmt->execute();
 
         // Si le token n'est pas dans la table des amis, renvoyer une erreur
