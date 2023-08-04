@@ -38,6 +38,9 @@ if (isset($_GET['ref_demande']) AND isset($_GET['ip_add']) AND isset($_GET['toke
                     ':ip_add' => $ip_add,
                     ':token' => $token
                     ]);
+                    $stmt = $conn->prepare("SELECT token FROM login");
+                    $stmt->execute();
+                    $mon_token = $stmt->fetchColumn();
                 } catch(PDOException $e) {
                     echo "Connection failed: " . $e->getMessage();
                     exit(); // Arrêter l'exécution si la connexion échoue
@@ -46,7 +49,7 @@ if (isset($_GET['ref_demande']) AND isset($_GET['ip_add']) AND isset($_GET['toke
         }
         // Écrire le nouveau tableau dans le fichier
         file_put_contents($file_path, implode(PHP_EOL, $new_lines));
-        header('Location: http://10.0.10.231/reponse.php?ref_demande='.$ref_demande.'&ip_add='. $ip_add);
+        header('Location: http://10.0.10.231/reponse.php?ref_demande='.$ref_demande.'&ip_add='. $ip_add.'&token='.$mon_token);
     }
 }
 ?>
