@@ -18,7 +18,7 @@
 
         // Si le ping est OK, connectez-vous en ssh et ajoutez les informations dans le fichier
         if ($result == 0) {
-            $stmt = $conn->prepare("SELECT token FROM login");
+            $stmt = $conn->prepare("SELECT token FROM login WHERE peusod = :pseudo");
             $stmt->bindParam(':pseudo', $pseudo);
             $stmt->execute();
             $token = $stmt->fetchColumn();
