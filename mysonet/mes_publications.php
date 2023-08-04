@@ -63,44 +63,47 @@ $stmt = $conn->query("SELECT COUNT(*) FROM demandes_recues WHERE statut = 'répo
 $demandes_ami = $stmt->fetchColumn();
 
 ?>
-
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Mes publications</title>
+    <title>Mes publications - MySoNet.Online</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <?php
-    // Si le nombre de demandes d'ami est supérieur à 0, afficher le message
-    if ($demandes_ami > 0) {
-        echo "<p><strong>" . $poste["date_publication"]. "</strong>: " . $poste["contenu"];
-    }
-    ?>
+<div class="header"><?php echo $_SESSION['pseudo'] ?> - MySoNet.Online</div>
 
-    <p><a href="postes_amis.php">Publications des amis</a></p>
+<div class="navbar">
+    <a href="postes_amis.php">Publications des amis</a>
+    <?php if ($demandes_ami > 0) {
+        echo '<a href="notif.php" class="notif-link"><span class="notif-icon">🔔</span><span class="notif-count">'.$demandes_ami.'</span></a>';
+    } ?>
+</div>
 
-    <h1>Mes publications</h1>
-    
+<div class="container">
     <h1>Mes publications</h1>
     <!-- Formulaire pour créer un nouveau poste -->
     <form action="creer_poste.php" method="post">
-        <textarea name="contenu" placeholder="Quoi de neuf ?" rows="4" cols="50"></textarea>
+        <textarea name="contenu" placeholder="Quoi de neuf ?" rows="4"></textarea>
         <br>
         <input type="submit" value="Publier">
     </form>
-    
+
     <?php
-    foreach($mes_postes as $poste){
-        echo "<p><strong>" . $poste["date_publication"]. "</strong>: " . $poste["contenu"]. "</p>";
+    include 'datePublication.php';
+    foreach($mes_postes as $poste) {
+        echo "<div class='poste'>";
         echo "<form action='modifier_poste.php' method='post' style='display:inline;'>
             <input type='hidden' name='poste_id' value='" . $poste["ID"] . "' />
-            <input type='submit' value='Modifier' />
+            <input type='submit' value='📝' class='edit-button' />
         </form>";
         echo "<form action='supprimer_poste.php' method='post' style='display:inline;'>
                 <input type='hidden' name='poste_id' value='" . $poste["ID"] . "' />
-                <input type='submit' value='Supprimer' />
+                <input type='submit' value='❌' class='delete-button' />
             </form></p>";
+        echo "<p><strong>" . tempsDepuisPublication($poste["date_publication"]) . "</strong>: " . $poste["contenu"]. "</p>";
+        echo "</div>";
     }
     ?>
+</div>
 </body>
 </html>
-

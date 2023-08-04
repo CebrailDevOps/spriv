@@ -27,28 +27,19 @@ try {
     echo "Connection failed: " . $e->getMessage();
 }
 ?>
-
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Notifications</title>
-    <style>
-        .demande-ami {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            margin-bottom: 10px;
-        }
-        .demande-ami p {
-            margin: 0;
-            padding: 0;
-        }
-    </style>
+    <title>Notifications - MySoNet.Online</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <p><a href="mes_publications.php">Mes publications</a></p>
-
-    <p><a href="postes_amis.php">Publications des amis</a></p>
-
+<div class="header"><?php echo $_SESSION['pseudo'] ?> - MySoNet.Online</div>
+<div class="navbar">
+    <a href="postes_amis.php">Publications des amis</a>
+    <a href="mes_publications.php">Mes publications</a>
+</div>
+<div class="container">
     <h1>Notifications</h1>
     <?php
     foreach($demandes as $demande){
@@ -56,13 +47,14 @@ try {
         echo "<p>Demande d'ami de " . $demande["demandeur"]. "</p>";
         echo "<form method='post' action='accepter_demande.php'>";
         echo "<input type='hidden' name='ref_demande' value='" . $demande["ref_demande"] . "'>";
-        echo "<button type='submit' name='accepter'>Accepter</button>";
+        echo "<button type='submit' name='accepter'>✅</button>";
         echo "</form>";
         echo "<form method='post' action='refuser_demande.php'>";
         echo "<input type='hidden' name='ref_demande' value='" . $demande["ref_demande"] . "'>";
-        echo "<button type='submit' name='refuser'>Refuser</button></div>";
+        echo "<button type='submit' name='refuser'>❌</button>";
         echo "</form></div>";
     }
     ?>
+</div>
 </body>
 </html>

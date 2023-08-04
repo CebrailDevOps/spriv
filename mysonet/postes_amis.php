@@ -91,6 +91,32 @@ $demandes_ami = $stmt->fetchColumn();
         let amis = <?php echo json_encode($amis); ?>;
         let userToken = <?php echo json_encode($user_token); ?>;
 
+        function timeSince(datePubli) {
+            let parts = datePubli.split(' ');
+            let dateParts = parts[0].split('-');
+            let timeParts = parts[1].split(':');
+
+            let date = new Date(
+                dateParts[0], // année
+                dateParts[1] - 1, // mois (0-indexé)
+                dateParts[2], // jour
+                timeParts[0], // heure
+                timeParts[1], // minute
+                timeParts[2] // seconde
+            );
+
+            const seconds = Math.floor((new Date() - date) / 1000);
+
+            if (seconds < 60) return "il y a " + seconds + "s";
+            if (seconds < 3600) return "il y a " + Math.floor(seconds / 60) + "min";
+            if (seconds < 86400) return "il y a " + Math.floor(seconds / 3600) + "h";
+            if (seconds < 604800) return "il y a " + Math.floor(seconds / 86400) + "j";
+            if (seconds < 2592000) return "il y a " + Math.floor(seconds / 604800) + "sem";
+            if (seconds < 31536000) return "il y a " + Math.floor(seconds / 2592000) + " mois";
+            if (seconds === 31536000) return "il y a 1 an";
+            return "il y a " + Math.floor(seconds / 31536000) + " ans";
+        }
+
         amis.forEach(ami => {
             fetch(`http://${ami.ip_add}/mes_postes.php?token=${userToken}`)
                 .then(response => response.json())
@@ -98,9 +124,10 @@ $demandes_ami = $stmt->fetchColumn();
                     let posteDiv = document.getElementById('postes_amis');
                     postes.forEach(poste => {
                         let p = document.createElement('p');
+                        p.className = 'poste';
                         posteDiv.appendChild(p);
                         let strong = document.createElement('strong');
-                        strong.textContent = ami.pseudo + ' ' + poste.date_publication + ': ';
+                        strong.textContent = ami.pseudo + ' ' + timeSince(poste.date_publication*1000) + ': ';
                         p.appendChild(strong);
                         let span = document.createElement('span');
                         span.textContent =  poste.contenu;
