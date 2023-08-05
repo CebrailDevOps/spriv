@@ -20,7 +20,7 @@ if (isset($_POST['ref_demande'])) {
         $stmt->execute();
 
         $ip_add=shell_exec("hostname -I");
-        header('Location: http://10.0.10.231/reponse.php?ref_demande='.$ref_demande.'&ip_add='. $ip_add);
+        header('Location: http://_IP_DU_SPRIN_/reponse.php?ref_demande='.$ref_demande.'&ip_add='. $ip_add);
     } catch(PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
