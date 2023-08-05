@@ -59,7 +59,7 @@ try {
     }
 
     // Récupération du nombre de demandes d'ami non traitées
-    $stm3t = $conn->query("SELECT COUNT(*) FROM demandes_recues WHERE statut = 'répondre'");
+    $stmt3 = $conn->query("SELECT COUNT(*) FROM demandes_recues WHERE statut = 'répondre'");
     $demandes_ami = $stmt3->fetchColumn();
 ?>
 <!DOCTYPE html>
