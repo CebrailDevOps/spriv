@@ -27,7 +27,7 @@
         }
 
         // Si le token est dans la table des amis, récupérer les postes
-        $stmt = $conn->query("SELECT * FROM mes_postes ORDER BY date_publication DESC");
+        $stmt2 = $conn->query("SELECT * FROM mes_postes ORDER BY date_publication DESC");
 
         $postes = array();
         while ($row = $stmt->fetch()) {

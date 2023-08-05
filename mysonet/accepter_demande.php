@@ -20,10 +20,10 @@ if (isset($_POST['ref_demande'])) {
         $stmt->bindParam(':ref_demande', $ref_demande);
         $stmt->execute();
         
-        $stmt = $conn->prepare("SELECT ip_demandeur FROM demandes_recues WHERE ref_demande = :ref_demande");
-        $stmt->bindParam(':ref_demande', $ref_demande);
-        $stmt->execute();
-        $ip_demandeur = $stmt->fetchColumn();
+        $stmt2 = $conn->prepare("SELECT ip_demandeur FROM demandes_recues WHERE ref_demande = :ref_demande");
+        $stmt2->bindParam(':ref_demande', $ref_demande);
+        $stmt2->execute();
+        $ip_demandeur = $stmt2->fetchColumn();
 
         // Vérifiez si l'IP est valide en envoyant un ping
         exec("ping -c 1 -W 2 " . $ip_demandeur, $output, $result);
@@ -53,10 +53,10 @@ if (isset($_POST['ref_demande'])) {
             </html>
         <?php }
         else {
-            $stmt = $conn->prepare("SELECT token FROM login WHERE pseudo = :pseudo");
-            $stmt->bindParam(':pseudo', $pseudo);
-            $stmt->execute();
-            $token = $stmt->fetchColumn();
+            $stmt3 = $conn->prepare("SELECT token FROM login WHERE pseudo = :pseudo");
+            $stmt3->bindParam(':pseudo', $pseudo);
+            $stmt3->execute();
+            $token = $stmt3->fetchColumn();
             
             $ip_add_full = shell_exec("hostname -I");
             $ip_add_array = explode(' ', $ip_add_full);

@@ -8,23 +8,23 @@ if (isset($_GET['ref_demande'])) {
         $stmt->bindParam(':ref_demande', $ref_demande);
         $stmt->execute();
         $demandeur = $stmt->fetchColumn();
-        $stmt = $conn->prepare("SELECT ip_demandeur FROM demandes_recues WHERE ref_demande = :ref_demande");
-        $stmt->bindParam(':ref_demande', $ref_demande);
-        $stmt->execute();
-        $ip_demandeur = $stmt->fetchColumn();
-        $stmt = $conn->prepare("DELETE FROM demandes_recues WHERE ref_demande = :ref_demande");
-        $stmt->bindParam(':ref_demande', $ref_demande);
-        $stmt->execute();
+        $stmt2 = $conn->prepare("SELECT ip_demandeur FROM demandes_recues WHERE ref_demande = :ref_demande");
+        $stmt2->bindParam(':ref_demande', $ref_demande);
+        $stmt2->execute();
+        $ip_demandeur = $stmt2->fetchColumn();
+        $stmt3 = $conn->prepare("DELETE FROM demandes_recues WHERE ref_demande = :ref_demande");
+        $stmt3->bindParam(':ref_demande', $ref_demande);
+        $stmt3->execute();
         if (isset($_GET['token'])) {
-            $stmt = $conn->prepare("INSERT INTO mes_amis (pseudo,ip_add,token) VALUES (:demandeur,:ip_demandeur,:token)");
-            $stmt->bindParam(':demandeur', $demandeur);
-            $stmt->bindParam(':ip_demandeur', $ip_demandeur);
-            $stmt->bindParam(':token', $_GET['token']);
-            $stmt->execute();
+            $stmt4 = $conn->prepare("INSERT INTO mes_amis (pseudo,ip_add,token) VALUES (:demandeur,:ip_demandeur,:token)");
+            $stmt4->bindParam(':demandeur', $demandeur);
+            $stmt4->bindParam(':ip_demandeur', $ip_demandeur);
+            $stmt4->bindParam(':token', $_GET['token']);
+            $stmt4->execute();
         }
-        $stmt = $conn->prepare("DELETE FROM demandes_recues WHERE ref_demande = :ref_demande");
-        $stmt->bindParam(':ref_demande', $ref_demande);
-        $stmt->execute();
+        $stmt5 = $conn->prepare("DELETE FROM demandes_recues WHERE ref_demande = :ref_demande");
+        $stmt5->bindParam(':ref_demande', $ref_demande);
+        $stmt5->execute();
     } catch(PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
         exit(); // Arrêter l'exécution si la connexion échoue

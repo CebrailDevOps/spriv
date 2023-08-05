@@ -19,9 +19,9 @@
 
         // Si le ping est OK
         if ($result == 0) {
-            $stmt = $pdo->prepare("SELECT token FROM login LIMIT 1");
-            $stmt->execute(); // Ajoutez cette ligne pour exécuter la requête
-            $token = $stmt->fetchColumn();
+            $stmt2 = $pdo->prepare("SELECT token FROM login LIMIT 1");
+            $stmt2->execute(); // Ajoutez cette ligne pour exécuter la requête
+            $token = $stmt2->fetchColumn();
 
             $ip_add_full = shell_exec("hostname -I");
             $ip_add_array = explode(' ', $ip_add_full);

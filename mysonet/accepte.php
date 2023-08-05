@@ -33,9 +33,9 @@ if (isset($_GET['ref_demande']) AND isset($_GET['ip_add']) AND isset($_GET['toke
                     $stmt->bindParam(':token', $token);
                     // Exécuter la requête SQL
                     $stmt->execute();
-                    $stmt = $conn->prepare("SELECT token FROM login");
-                    $stmt->execute();
-                    $mon_token = $stmt->fetchColumn();
+                    $stmt2 = $conn->prepare("SELECT token FROM login");
+                    $stmt2->execute();
+                    $mon_token = $stmt2->fetchColumn();
                 } catch(PDOException $e) {
                     echo "Connection failed: " . $e->getMessage();
                     exit(); // Arrêter l'exécution si la connexion échoue

@@ -42,11 +42,11 @@ try {
             list($ref_demande, $pseudo_demandeur, $ip_demandeur, $date_et_heure) = explode(';', $line);
 
             // Préparer la requête SQL pour insérer la demande dans la base de données
-            $stmt = $conn->prepare("INSERT INTO demandes_recues (ref_demande, demandeur, ip_demandeur, date_demande)
+            $stmt2 = $conn->prepare("INSERT INTO demandes_recues (ref_demande, demandeur, ip_demandeur, date_demande)
                                     VALUES (:ref_demande, :demandeur, :ip_demandeur, :date_demande)");
 
             // Exécuter la requête SQL
-            $stmt->execute([
+            $stmt2->execute([
                 ':ref_demande' => $ref_demande,
                 ':demandeur' => $pseudo_demandeur,
                 ':ip_demandeur' => $ip_demandeur,
@@ -59,8 +59,8 @@ try {
     }
 
     // Récupération du nombre de demandes d'ami non traitées
-    $stmt = $conn->query("SELECT COUNT(*) FROM demandes_recues WHERE statut = 'répondre'");
-    $demandes_ami = $stmt->fetchColumn();
+    $stm3t = $conn->query("SELECT COUNT(*) FROM demandes_recues WHERE statut = 'répondre'");
+    $demandes_ami = $stmt3->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html>
