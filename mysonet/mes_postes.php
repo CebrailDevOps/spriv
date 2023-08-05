@@ -30,7 +30,7 @@
         $stmt2 = $conn->query("SELECT * FROM mes_postes ORDER BY date_publication DESC");
 
         $postes = array();
-        while ($row = $stmt->fetch()) {
+        while ($row = $stmt2->fetch()) {
             $postes[] = $row;
         }
 
