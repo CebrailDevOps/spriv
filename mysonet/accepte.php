@@ -5,7 +5,7 @@ if (isset($_GET['ref_demande']) AND isset($_GET['ip_add']) AND isset($_GET['toke
     $token = $_GET['token'];
 
     // Assurez-vous de vérifier le chemin d'accès au fichier et de le modifier si nécessaire
-    $file_path = '/home/inspectorsonet/demandes_envoyees';
+    $file_path = '/home/inspectorsonet/demandes_en_attente';
 
     if (file_exists($file_path)) {
         // Lire le fichier dans un tableau
@@ -16,9 +16,9 @@ if (isset($_GET['ref_demande']) AND isset($_GET['ip_add']) AND isset($_GET['toke
         // Parcourir chaque ligne du fichier
         foreach ($lines as $line) {
             // Diviser la ligne pour obtenir les détails de la demande
-            list($ref_demande2, $pseudo_demande) = explode(';', $line);
+            list($ref_demande2, $pseudo_demande, $ip_demande, $date) = explode(';', $line);
 
-            if ($ref_demande != $ref_demande2) {
+            if ($ref_demande != $ref_demande2 AND $ip_add != $ip_demande) {
                 // Si la ligne ne correspond pas à ref_demande, ajoutez-la au nouveau tableau
                 $new_lines[] = $line;
             } else {
