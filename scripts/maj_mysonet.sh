@@ -13,7 +13,11 @@ echo "Les dossiers et fichiers ont été téléchargés avec succès depuis le d
 
 # Déplacer le contenu du dossier mysonet vers /var/www/mysonet
 
-sudo rm sprv/mysonet/db.php
+sudo rm spriv/mysonet/db.php
+
+sudo mv /var/www/mysonet/db.php spriv/mysonet
+
+sudo rm /var/www/mysonet/*
 
 sudo mv spriv/mysonet/* /var/www/mysonet
 
