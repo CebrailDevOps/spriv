@@ -1,5 +1,6 @@
 <?php
 if (isset($_GET['ref_demande'])) {
+    $ref_demande = $_GET['ref_demande'];
     include 'db.php';
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
