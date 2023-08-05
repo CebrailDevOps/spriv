@@ -309,3 +309,5 @@ echo "2 - Pour vous connectez à votre compte allez sur un navigateur web et tap
 echo "Pour trouvez des amis, connectez-vous sur mysonet.online !"
 
 echo "!!! Changez la dernière ligne de /var/www/mysonet/accepte.php !!!"
+
+echo "!!! Changez la ligne de /var/www/mysonet/refuser_demande.php !!!"
