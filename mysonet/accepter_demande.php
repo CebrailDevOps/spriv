@@ -45,9 +45,9 @@ if (isset($_POST['ref_demande'])) {
                 } ?>
             </div>
             <div class="container">
-                <p>Vous avez accepté la demande d'ami.<br>Vous pourrez voir les publications de votre nouvel ami seulement quand son serveur est en ligne.
+                <p>Vous avez accepté la demande d'ami.<br>Vous pourrez voir ses publications quand son serveur sera en ligne.
                 <br>Vous allez être redirigé...</p>
-                <script>setTimeout(function(){window.location.href = 'notif.php';}, 3000);</script>
+                <script>setTimeout(function(){window.location.href = 'notif.php';}, 5000);</script>
             </div>
             </body>
             </html>

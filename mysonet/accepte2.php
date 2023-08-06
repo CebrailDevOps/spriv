@@ -21,8 +21,25 @@ if (isset($_GET['ref_demande'])) {
     } catch(PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
         exit(); // Arrêter l'exécution si la connexion échoue
-    }
+    } ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demande acceptée - MySoNet.Online</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="header"><?php echo $_SESSION['pseudo'] ?> - MySoNet.Online</div>
+<div class="navbar">
+    <a href="postes_amis.php">Publications des amis</a>
+    <a href="mes_publications.php">Mes publications</a>
+</div>
+<div class="container">
+<?php
     echo "Vous avez accepté la demande d'ami.<br>Vous allez être redirigé...";
-    echo "<script>setTimeout(function(){window.location.href = 'notif.php';}, 3000);</script>";
+    echo "<script>setTimeout(function(){window.location.href = 'notif.php';}, 5000);</script>";
 }
 ?>
+</div>
+</body>
+</html>
