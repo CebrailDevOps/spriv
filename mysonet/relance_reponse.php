@@ -3,7 +3,7 @@ include 'session.php';
 include 'db.php';
 
 // Récupérer toutes les demandes en attente de reconnexion
-$stmt = $pdo->prepare("SELECT demandeur, ip_demandeur, ref_demande FROM demandes_recues WHERE statut = 'En attente de reconnexion'");
+$stmt = $conn->prepare("SELECT demandeur, ip_demandeur, ref_demande FROM demandes_recues WHERE statut = 'En attente de reconnexion'");
 $stmt->execute();
 $demandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -14,7 +14,7 @@ foreach($demandes as $demande) {
 
     // Si le ping est OK
     if ($result == 0) {
-        $stmt2 = $pdo->prepare("SELECT token FROM login LIMIT 1");
+        $stmt2 = $conn->prepare("SELECT token FROM login LIMIT 1");
         $stmt2->execute(); // Ajoutez cette ligne pour exécuter la requête
         $token = $stmt2->fetchColumn();
 
