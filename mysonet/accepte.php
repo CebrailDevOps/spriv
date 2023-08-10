@@ -38,8 +38,8 @@ if (isset($_GET['ref_demande']) AND isset($_GET['ip_add']) AND isset($_GET['toke
         }
         // Écrire le nouveau tableau dans le fichier
         file_put_contents($file_path, implode(PHP_EOL, $new_lines));
-        include 'monip.php';
-        header('Location: http://'.$monip.'/reponse.php?ref_demande='.$ref_demande.'&ip_add='. $ip_add.'&token='.$mon_token);
+        include 'ipsprin.php';
+        header('Location: http://'.$ipsprin.'/reponse.php?ref_demande='.$ref_demande.'&ip_add='. $ip_add.'&token='.$mon_token);
     }
 }
 ?>

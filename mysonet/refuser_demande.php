@@ -17,7 +17,7 @@ if (isset($_POST['ref_demande'])) {
 
     $ip_add=shell_exec("hostname -I");
     include 'monip.php';
-    header('Location: http://'.$monip.'/reponse.php?ref_demande='.$ref_demande.'&ip_add='. $ip_add);
+    header('Location: http://'.$ipsprin.'/reponse.php?ref_demande='.$ref_demande.'&ip_add='. $ip_add);
 }
 ?>
 

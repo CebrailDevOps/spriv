@@ -15,7 +15,11 @@ echo "Les dossiers et fichiers ont été téléchargés avec succès depuis le d
 
 sudo rm spriv/mysonet/db.php
 
+sudo rm spriv/mysonet/ipsprin.php
+
 sudo mv /var/www/mysonet/db.php spriv/mysonet
+
+sudo mv /var/www/mysonet/ipsprin.php spriv/mysonet
 
 sudo rm /var/www/mysonet/*
 
