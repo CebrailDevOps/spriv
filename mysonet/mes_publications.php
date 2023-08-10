@@ -1,63 +1,20 @@
 <?php
-session_start();
+include 'session.php';
 
-if (!isset($_SESSION['pseudo'])) {
+if (!isset($pseudo)) {
     header("Location: index.php");
     exit();
 }
 
 include 'db.php';
 
-try {
-    // Créer une connexion
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    // set the PDO error mode to exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Récupération des posts de l'utilisateur actuellement connecté
+$stmt = $conn->prepare("SELECT * FROM mes_postes ORDER BY date_publication DESC");
+$stmt->execute();
 
-    $pseudo = $_SESSION['pseudo'];
+$mes_postes = $stmt->fetchAll(PDO::FETCH_ASSOC); 
 
-    // Récupération des posts de l'utilisateur actuellement connecté
-    $stmt = $conn->prepare("SELECT * FROM mes_postes ORDER BY date_publication DESC");
-    $stmt->execute();
-
-    $mes_postes = $stmt->fetchAll(PDO::FETCH_ASSOC); 
-    
-} catch(PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-}
-
-// Assurez-vous de vérifier le chemin d'accès au fichier et de le modifier si nécessaire
-$file_path = '/home/inspectorsonet/demandes_en_attente';
-
-if (file_exists($file_path)) {
-    // Lire le fichier dans un tableau
-    $lines = file($file_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-    // Parcourir chaque ligne du fichier
-    foreach ($lines as $line) {
-        // Diviser la ligne pour obtenir les détails de la demande
-        list($ref_demande, $pseudo_demandeur, $ip_demandeur, $date_et_heure) = explode(';', $line);
-
-        // Préparer la requête SQL pour insérer la demande dans la base de données
-        $stmt2 = $conn->prepare("INSERT INTO demandes_recues (ref_demande, demandeur, ip_demandeur, date_demande)
-                                VALUES (:ref_demande, :demandeur, :ip_demandeur, :date_demande)");
-
-        // Exécuter la requête SQL
-        $stmt2->execute([
-            ':ref_demande' => $ref_demande,
-            ':demandeur' => $pseudo_demandeur,
-            ':ip_demandeur' => $ip_demandeur,
-            ':date_demande' => $date_et_heure
-        ]);
-    }
-
-    // Une fois que toutes les demandes sont traitées, vous pouvez vider le fichier
-    file_put_contents($file_path, '');
-}
-
-// Récupération du nombre de demandes d'ami non traitées
-$stmt3 = $conn->query("SELECT COUNT(*) FROM demandes_recues WHERE statut = 'répondre'");
-$demandes_ami = $stmt3->fetchColumn();
+include 'notifier.php';
 
 ?>
 <!DOCTYPE html>
@@ -67,15 +24,8 @@ $demandes_ami = $stmt3->fetchColumn();
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="header"><?php echo $_SESSION['pseudo'] ?> - MySoNet.Online</div>
 
-<div class="navbar">
-    <a href="postes_amis.php">Publications des amis</a>
-    <a href="mes_publications.php">Mes publications</a>
-    <?php if ($demandes_ami > 0) {
-        echo '<a href="notif.php" class="notif-link"><span class="notif-icon">🔔</span><span class="notif-count">'.$demandes_ami.'</span></a>';
-    } ?>
-</div>
+<?php include 'navbarNotif.php'; ?>
 
 <div class="container">
     <h1>Mes publications</h1>
