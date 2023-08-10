@@ -1,9 +1,9 @@
 <?php
 session_start();
+include 'db.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pseudo = $_POST["pseudo"];
     $pwd = $_POST["pwd"];
-    include 'db.php';
     $stmt = $conn->prepare("SELECT * FROM login WHERE pseudo = :pseudo AND mot_de_passe = PASSWORD(:pwd)");
     $stmt->bindParam(':pseudo', $pseudo);
     $stmt->bindParam(':pwd', $pwd);
