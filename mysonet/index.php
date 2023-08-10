@@ -1,10 +1,3 @@
-<?php
-include 'session.php';
-if (isset($pseudo)) {
-    header("Location: mes_publications.php");
-}
-?>
-
 <!DOCTYPE html>
 <html>
 <head>

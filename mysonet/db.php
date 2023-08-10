@@ -8,6 +8,6 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
-    exit(); // Arrêter l'exécution si la connexion échoue
+    exit();
 }
 ?>
