@@ -307,5 +307,3 @@ echo "1 - Votre serveur personnel MySoNet a été configuré."
 echo "2 - Pour vous connectez à votre compte allez sur un navigateur web et taper votre IP ou nom de domaine."
 
 echo "Pour trouvez des amis, connectez-vous sur mysonet.online !"
-
-echo "!!! la ligne de /var/www/mysonet/ipsprin.php !!!"
